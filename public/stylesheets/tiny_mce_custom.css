@@ -1,3 +1,20 @@
 body, td, th {
   font: 87.5%/1.1286 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
 }
+
+[data-preserve-html="true"]::before {
+  content: 'Content with data-preserve-html can only be edited in the HTML view';
+  width: 100%;
+  background: #d1e1ef;
+  border: 1px solid #c2d2df;
+  margin: 0.643em auto;
+  padding: 0.25em 0.375em;
+  clear: right;
+  box-shadow: inset 1px 1px 2px;
+  border-radius: 0.25em;
+  box-shadow: 0px 0 3px #fff;
+}
+
+[data-preserve-html="true"] {
+  opacity: 0.75;
+}

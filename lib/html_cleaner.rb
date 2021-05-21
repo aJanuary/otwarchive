@@ -162,8 +162,8 @@ module HtmlCleaner
       end
       # Now that we know what transformers we need, let's sanitize the unfrozen value
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
-        unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value),
-                               Sanitize::Config::CSS_ALLOWED.merge(transformers: transformers)))
+        config = Sanitize::Config::CSS_ALLOWED.deep_merge({ transformers: transformers, attributes: { div: (Sanitize::Config::CSS_ALLOWED[:attributes][:div] || Set.new) + ['data-preserve-html'] } })
+        unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value), config))
       else
         # the screencast field shouldn't be wrapped in <p> tags
         unfrozen_value = add_paragraphs_to_text(Sanitize.clean(fix_bad_characters(unfrozen_value),
@@ -184,6 +184,7 @@ module HtmlCleaner
 
     # Plain text fields can't contain &amp; entities:
     unfrozen_value.gsub!(/&amp;/, '&') unless (ArchiveConfig.FIELDS_ALLOWING_HTML_ENTITIES + ArchiveConfig.FIELDS_ALLOWING_HTML).include?(field.to_s)
+
     unfrozen_value
   end
 
@@ -276,7 +277,7 @@ module HtmlCleaner
 
     # Don't descend into node if we don't want to touch the content of
     # this kind of tag
-    if dont_touch_content_tag?(node.name)
+    if dont_touch_content_tag?(node.name) || node['data-preserve-html']
       if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
         return [stack, out_html + "<p>#{node.to_s}</p>"]
       end

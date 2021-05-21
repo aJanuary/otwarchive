@@ -49,6 +49,7 @@
 <%= javascript_include_tag "filters.min", skip_pipeline: true %>
 
 <% if allow_tinymce?(controller) %>
+  <%= yield :preservehtml_plugin %>
   <%= yield :tinymce_init %>
 <% end %>
 

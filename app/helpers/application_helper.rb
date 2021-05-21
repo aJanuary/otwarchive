@@ -253,6 +253,10 @@ module ApplicationHelper
     content_for :tinymce do
       javascript_include_tag "tinymce/tinymce.min.js", skip_pipeline: true
     end
+    @content_for_preservehtml_plugin = ""
+    content_for :preservehtml_plugin do
+      javascript_include_tag "mce_preservehtml_plugin.js", skip_pipeline: true
+    end
     @content_for_tinymce_init = ""
     content_for :tinymce_init do
       javascript_include_tag "mce_editor.min.js", skip_pipeline: true
